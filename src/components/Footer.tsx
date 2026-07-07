@@ -1,4 +1,4 @@
-import { Mail, Phone, MapPin, Instagram, Facebook } from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { CONTACT } from "@/lib/contact";
 import logo from "@/assets/fqp/logo.png.asset.json";

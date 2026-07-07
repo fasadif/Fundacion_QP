@@ -84,21 +84,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Fundación Quórum por la Paz — Unidos por la Paz" },
+      {
+        name: "description",
+        content:
+          "Fundación colombiana por la reconciliación, la familia y el desarrollo humano. Unidos por la Paz en Colombia.",
+      },
+      { name: "author", content: "Fundación Quórum por la Paz" },
+      { property: "og:title", content: "Fundación Quórum por la Paz" },
+      { property: "og:description", content: "Unidos por la Paz en Colombia." },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "Fundación Quórum por la Paz" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
-      {
-        rel: "stylesheet",
-        href: appCss,
-      },
-      { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
+      { rel: "stylesheet", href: appCss },
+      { rel: "icon", href: faviconAsset.url, type: "image/png" },
     ],
   }),
   shellComponent: RootShell,

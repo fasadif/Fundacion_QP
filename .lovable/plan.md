@@ -1,50 +1,47 @@
+## The real problem
 
-# Fundación Quórum por la Paz — Website Plan
+Your site is built with **TanStack Start**, which is a server-side rendering (SSR) framework — not a plain static site generator. When you run `npm run build`, it produces a **server bundle** (in `.output/` or `.nitro/`) meant to run on Node/Cloudflare Workers, **not** a `dist/index.html` you can drop into Hostinger's `public_html`.
 
-## Goal
-A simple, professional bilingual (Spanish/English) informational website for the foundation, using your existing brand identity (logos, colors, imagery from `FundacionQP.zip`). No payments, no form backend — visitors contact you directly via email, phone/WhatsApp buttons.
+That is why WSL "succeeded" but you found no `dist/` and no `index.html`. Hostinger shared hosting only serves static files, so this build format is incompatible as-is.
 
-## About the Hostinger ZIP export
-- **Free plan:** site can only live at a `*.lovable.app` URL. No ZIP download, no custom-domain connection.
-- **Paid plan (required for your goal):** either
-  - **(A, recommended)** Point your Hostinger domain's DNS to Lovable — same domain, no ZIP, updates are one click.
-  - **(B)** Export the code to GitHub or download a ZIP and upload to Hostinger's `public_html`.
-- I will build the site so **both options work**. You decide when you upgrade.
+## Options to actually get a static site for Hostinger
 
-## Site structure (single-page, scrollable sections + top nav)
+**Option A — Prerender the site to static HTML (recommended, keeps current code)**
+- Configure the Nitro build preset to `static` so it crawls every route and outputs plain HTML/CSS/JS.
+- Output goes to `.output/public/` — that folder's contents (index.html + assets + your PDFs) is what you upload to `public_html`.
+- Works because your site has no login, no database, no server functions — it's fully static content.
+- One caveat: the language toggle (ES/EN) still works client-side after the page loads.
 
-1. **Hero** — Logo, tagline, primary CTA "Contáctanos / Contact us", background: `fondo-unidos-por-la-paz.jpg`
-2. **Quiénes Somos / About** — Foundation mission, using brand voice from the Portfolio PDF
-3. **Qué Hacemos / What We Do** — 3–4 service cards (reconciliación comunitaria, diagnóstico familiar, etc.) with your photos
-4. **Portafolio / Portfolio** — Embedded viewer + download button for `FQP Portafolio v4.pdf`; also links to legal docs (Junta de Acción Comunal, etc.) as downloads
-5. **Galería / Gallery** — Grid of your community photos
-6. **Contacto / Contact** — Big buttons:
-   - ✉️ Email: `contacto@fundacionqp.com`
-   - 📱 WhatsApp (you'll give me the number, or I leave a placeholder)
-   - 📞 Phone (optional)
-   - Instagram / Facebook links (optional)
-7. **Footer** — Logo, copyright, quick links
+**Option B — Rebuild as a plain Vite SPA (bigger change)**
+- Strip TanStack Start, use plain React + Vite. `npm run build` then produces `dist/index.html` naturally.
+- More work, throws away the current routing setup, but produces the simplest possible static output.
 
-## Bilingual toggle
-Top-right ES/EN switcher. All copy stored in a translation file so you can edit both languages in one place.
+**Option C — Use Lovable Pro's one-click ZIP**
+- No WSL, no Node, no build knowledge required. Download ZIP → unzip into `public_html`. Done.
 
-## Brand & design
-- Colors: pulled from your Brand Manual (`Manual QP.pdf`) — the deep brand blue seen in `logo-fondo-azul.png` and `fondo-unidos-por-la-paz.jpg` as primary, with warm accent from the logo.
-- Typography: clean sans-serif (Figtree/Outfit) — I'll match the manual's typography if it specifies one.
-- Favicon: your `favicon.png`
-- All images become Lovable CDN assets so the site loads fast globally.
+## Recommendation
 
-## Technical notes
-- Static, no backend — works as a ZIP on Hostinger.
-- All PDFs (portfolio + legal docs) downloadable from the site.
-- Responsive (mobile, tablet, desktop).
-- SEO: Spanish + English meta tags, proper title, Open Graph image using your logo.
-- Videos: none in the zip — I'll leave a section ready so you can paste YouTube/Vimeo links later, or skip it entirely if you prefer.
+Go with **Option A**. Smallest change, keeps everything we already built, and gives you exactly what Hostinger needs.
 
-## What I need from you (can also fill in later)
-- WhatsApp number, phone number, physical address (if you want it shown)
-- Instagram / Facebook / other social links
-- Any short "mission statement" text you want verbatim (otherwise I'll draft from the portfolio PDF)
+### What I would change (technical)
+1. Update `vite.config.ts` to set the Nitro preset to `static` (prerender all routes).
+2. Add a `.env.production` or ensure no `VITE_*` vars are required (your site doesn't use any, so nothing to configure).
+3. Update the README / add a short `HOSTINGER.md` with the exact commands:
+   ```
+   npm install
+   npm run build
+   # then upload contents of .output/public/ to public_html
+   ```
+4. Verify locally that `.output/public/index.html` exists and the site loads when opened directly.
 
-## Deliverable after approval
-A fully working preview at your Lovable URL. When you upgrade, you get the ZIP or custom-domain option immediately — no rebuild needed.
+### What you'd do in WSL after I ship the change
+```
+git pull
+npm install
+npm run build
+```
+Then in Hostinger File Manager, upload everything **inside** `.output/public/` (not the folder itself) into `public_html/`, and zip it locally first if you prefer.
+
+## Confirm before I build
+
+Shall I proceed with **Option A** (configure static prerendering so `npm run build` produces uploadable static files)?

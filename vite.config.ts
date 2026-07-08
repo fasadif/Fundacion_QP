@@ -24,11 +24,12 @@ export default defineConfig({
             dir: "dist",
             publicDir: "dist",
           },
+          // `prerender` is a valid Nitro option but not in the wrapper's narrower type.
           prerender: {
             crawlLinks: true,
             failOnError: false,
             routes: ["/"],
           },
-        },
+        } as any,
       }),
 });
